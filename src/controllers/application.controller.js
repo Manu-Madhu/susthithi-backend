@@ -120,8 +120,8 @@ async function cofeeWebhookHandler(req, res) {
     console.log("Webhook verified:", req.body);
 
     // Process event
-    const { event_name, order_status, order_id, data } = req.body;
-
+    const { event_name, data } = req.body;
+    const { order_status, order_id } = data;
     const app = await Application.findOne({ paymentProviderOrderId: order_id });
     if (!app) return res.status(404).json({ error: "Application not found" });
 
