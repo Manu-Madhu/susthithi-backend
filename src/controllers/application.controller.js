@@ -109,23 +109,17 @@ async function getAllApplications(req, res, next) {
 // Webhook handler (CoFee sends POST callbacks on success/failure)
 async function cofeeWebhookHandler(req, res) {
   try {
-    const rawBody = JSON.stringify(req.body);
+    // Signature check
     const signature = req.headers["x-cofee-signature"];
     const verificationKey = process.env.COFE_WEBHOOK_SECRET;
 
-    // Recreate signature
-    const expectedSignature = crypto
-      .createHmac("sha256", verificationKey)
-      .update(rawBody)
-      .digest("base64");
-
-    if (signature !== expectedSignature) {
+    if (!signature || signature !== verificationKey) {
       return res.status(401).json({ error: "Invalid signature" });
     }
 
-    console.log("hi i am here from webhook", rawBody);
+    console.log("Webhook verified:", req.body);
 
-    // Safe to trust the request now
+    // Process event
     const { event_name, data } = req.body;
     const { order_id, order_status } = data;
 
