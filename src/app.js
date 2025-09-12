@@ -17,6 +17,8 @@ const { user_dev_url, admin_dev_url, user_prod_url, admin_prod_url, NODE_ENV } =
 
 app.use(cookieParser());
 
+console.log("MONGO_URI exists:", !!process.env.MONGO_URI);
+
 const corsOptions = {
   credentials: true,
   origin: function (origin, callback) {
