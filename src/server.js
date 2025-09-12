@@ -1,6 +1,6 @@
 const app = require('./app.js');
-const connectDB = require('./config/db.js');
 const logger = require('./utils/logger.js');
+const connectDB = require('./config/db.js');
 
 const PORT = process.env.PORT || 4000;
 
