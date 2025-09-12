@@ -2,7 +2,6 @@ const Application = require("../models/Application.model.js");
 const {
   createApplicationService,
   updateApplicationPayment,
-  getAApplicationByOrderIDService,
 } = require("../services/application.service.js");
 const { createCofeeOrder } = require("../services/payment.service.js");
 const {
