@@ -24,7 +24,6 @@ async function createApplication(req, res) {
     }
 
     const referenceId = await generateReferenceId(data);
-    console.log(referenceId, 'fromt he helper')
 
     // Save initial application
     const app = await createApplicationService(data, fee);
@@ -47,7 +46,7 @@ async function createApplication(req, res) {
         referenceId,
       },
       merchantOrderId: `order_${app._id}`,
-      redirectUrl: `${process.env.BASE_URL}/payment/success`,
+      redirectUrl: `${process.env.BASE_URL}/payment/success/`,
     });
 
     if (!cofeeOrder || !cofeeOrder.orderId) {

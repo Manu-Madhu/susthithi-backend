@@ -27,7 +27,7 @@ const ApplicationSchema = new Schema(
       type: String,
       default: "cofee",
     },
-    paymentProviderPaymentId: { type: String },
+    paymentProviderOrderId: { type: String },
   },
   { timestamps: true }
 );

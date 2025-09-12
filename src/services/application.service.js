@@ -33,8 +33,7 @@ async function updateApplicationPayment(appId, paymentData) {
   return await Application.findByIdAndUpdate(
     appId,
     {
-      paymentLink: paymentData.paymentLink,
-      providerOrderId: paymentData.orderId,
+      paymentProviderOrderId: paymentData.orderId,
       paymentStatus: paymentData.orderStatus,
     },
     { new: true }
