@@ -90,10 +90,11 @@ async function createApplication(req, res) {
 
 async function getAllApplications(req, res, next) {
   try {
-    const data = await getAllApplicationService()
+    const data = await getAllApplicationService();
     res.status(200),
       json({
         success: true,
+        data: data,
       });
   } catch (err) {
     console.error(err);
@@ -110,8 +111,8 @@ async function getAllApplications(req, res, next) {
 async function cofeeWebhookHandler(req, res) {
   try {
     const rawBody = JSON.stringify(req.body);
-    const signature = req.headers["x-cofee-signature"]; 
-    const verificationKey = process.env.COFE_WEBHOOK_SECRET; 
+    const signature = req.headers["x-cofee-signature"];
+    const verificationKey = process.env.COFE_WEBHOOK_SECRET;
 
     // Recreate signature
     const expectedSignature = crypto
@@ -123,7 +124,7 @@ async function cofeeWebhookHandler(req, res) {
       return res.status(401).json({ error: "Invalid signature" });
     }
 
-    console.log("hi i am here from webhook", rawBody)
+    console.log("hi i am here from webhook", rawBody);
 
     // Safe to trust the request now
     const { event_name, data } = req.body;
