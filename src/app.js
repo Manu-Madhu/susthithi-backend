@@ -17,7 +17,6 @@ const { user_dev_url, admin_dev_url, user_prod_url, admin_prod_url, NODE_ENV } =
 
 app.use(cookieParser());
 
-console.log("ia m checking my env file is accessible", process.env.NODE_ENV);
 const corsOptions = {
   credentials: true,
   origin: function (origin, callback) {
