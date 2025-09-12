@@ -13,7 +13,7 @@ const {
 } = require("../utils/helperFunction.js");
 
 const FEE_MAP = {
-  cetaa: 1,
+  cetaa: 10,
   // cetaa: 3000,
   engineers_club: 3000,
   delegate: 5000,
