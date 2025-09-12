@@ -1,7 +1,9 @@
+const Application = require("../models/Application.model.js");
+const crypto = require("crypto");
+
 const {
   createApplicationService,
   updateApplicationPayment,
-  getAApplicationByOrderIDService,
 } = require("../services/application.service.js");
 const { createCofeeOrder } = require("../services/payment.service.js");
 const {
@@ -104,44 +106,42 @@ async function getApplications(req, res, next) {
 }
 
 // Webhook handler (CoFee sends POST callbacks on success/failure)
-async function cofeeWebhookHandler(req, res, next) {
+async function cofeeWebhookHandler(req, res) {
   try {
-    const { event_name, data } = req.body;
+    const rawBody = JSON.stringify(req.body);
+    const signature = req.headers["x-cofee-signature"]; 
+    const verificationKey = process.env.COFE_WEBHOOK_SECRET; 
 
-    if (!event_name || !data) {
-      return res.status(400).json({ error: "Invalid webhook payload" });
+    // Recreate signature
+    const expectedSignature = crypto
+      .createHmac("sha256", verificationKey)
+      .update(rawBody)
+      .digest("base64");
+
+    if (signature !== expectedSignature) {
+      return res.status(401).json({ error: "Invalid signature" });
     }
 
-    // Extract order_id and status
+    console.log("hi i am here from webhook", rawBody)
+
+    // Safe to trust the request now
+    const { event_name, data } = req.body;
     const { order_id, order_status } = data;
 
-    // Find application by provider order id
-    const app = await getAApplicationByOrderIDService(order_id);
-    if (!app) {
-      return res.status(404).json({ error: "Application not found" });
-    }
+    const app = await Application.findOne({ providerOrderId: order_id });
+    if (!app) return res.status(404).json({ error: "Application not found" });
 
-    // Normalize status (you can customize the function)
-    let paymentStatus = "pending";
-    if (event_name === "payment-order.paid" && order_status === "success") {
-      paymentStatus = "paid";
-    } else if (order_status === "failed" || order_status === "failure") {
-      paymentStatus = "failed";
-    }
+    app.paymentStatus =
+      event_name === "payment-order.paid" && order_status === "success"
+        ? "paid"
+        : "failed";
 
-    // Update application
-    app.paymentStatus = paymentStatus;
     await app.save();
 
-    res.status(200).json({ received: true, updatedStatus: paymentStatus });
+    res.status(200).json({ received: true });
   } catch (err) {
-    console.error("CoFee Webhook Error:", err);
-    res.status(500).json({
-      success: false,
-      message: "Internal Server error",
-      data: null,
-      error: "INTERNAL_SERVER_ERROR",
-    });
+    console.error("Webhook error:", err);
+    res.status(500).json({ error: "Internal server error" });
   }
 }
 
