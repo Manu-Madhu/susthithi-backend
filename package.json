@@ -1,0 +1,37 @@
+{
+  "name": "susthithi-backend",
+  "version": "1.0.0",
+  "description": "Susthithi backend ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Manu-Madhu/susthithi-backend.git"
+  },
+  "keywords": [
+    "Susthithi"
+  ],
+  "author": "Manu M",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Manu-Madhu/susthithi-backend/issues"
+  },
+  "homepage": "https://github.com/Manu-Madhu/susthithi-backend#readme",
+  "dependencies": {
+    "axios": "^1.12.0",
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "express-rate-limit": "^8.1.0",
+    "helmet": "^8.1.0",
+    "joi": "^17.13.3",
+    "mongoose": "^8.18.1",
+    "morgan": "^1.10.1",
+    "winston": "^3.17.0"
+  }
+}
