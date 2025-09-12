@@ -13,7 +13,7 @@ const {
 } = require("../utils/helperFunction.js");
 
 const FEE_MAP = {
-  cetaa: 10,
+  cetaa: 2,
   // cetaa: 3000,
   engineers_club: 3000,
   delegate: 5000,
@@ -67,8 +67,6 @@ async function createApplication(req, res) {
       orderStatus: normalizePaymentStatus(cofeeOrder.orderStatus),
     });
 
-    console.log(cofeeOrder);
-
     res.status(200).json({
       success: true,
       message: "Application saved with status processing",
@@ -85,7 +83,7 @@ async function createApplication(req, res) {
     console.error(err);
     res.status(500).json({
       success: false,
-      message: err.message || "Internal Server Error",
+      message: err.response?.message || "Internal Server Error",
     });
   }
 }

@@ -23,7 +23,7 @@ function formatPhone(phone) {
 
 function formatCustomerRefId(input) {
   if (!input) return "customer_" + Date.now();
-  return input.replace(/[^a-zA-Z0-9 _-]/g, "_"); 
+  return input.replace(/[^a-zA-Z0-9 _-]/g, "_");
 }
 
 // Call CoFee API to create payment order
@@ -46,8 +46,9 @@ async function createCofeeOrder({
         name: customer.name,
         email: customer.email,
         mobile: formatPhone(customer.mobile),
-        customer_reference_id:
-          formatCustomerRefId(customer.referenceId || customer.email),
+        customer_reference_id: formatCustomerRefId(
+          customer.referenceId || customer.email
+        ),
       },
       order_items: [{ item_name: "Registration Fee", amount }],
       redirect_url: redirectUrl,
@@ -63,11 +64,11 @@ async function createCofeeOrder({
     return {
       orderId: data.data.order_id,
       paymentLink: data.data.payment_link,
-      orderStatus: data.data.order_status, 
+      orderStatus: data.data.order_status,
     };
   } catch (err) {
-    console.error("CoFee API Error:", err.response?.data || err.message);
-    throw new Error("Payment provider error");
+    console.error("CoFee API Error:", err.response?.data );
+    return err;
   }
 }
 
