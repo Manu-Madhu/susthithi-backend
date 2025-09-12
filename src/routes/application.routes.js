@@ -6,7 +6,7 @@ const controller = require("../controllers/application.controller.js");
 router.post("/applications", controller.createApplication);
 
 // fetch
-router.get("/applications", controller.getApplications);
+router.get("/applications", controller.getAllApplications);
 // router.get("/applications/:id", controller.getApplicationById);
 
 // webhook endpoint (stripe)

@@ -88,8 +88,9 @@ async function createApplication(req, res) {
   }
 }
 
-async function getApplications(req, res, next) {
+async function getAllApplications(req, res, next) {
   try {
+    const data = await getAllApplicationService()
     res.status(200),
       json({
         success: true,
@@ -147,6 +148,6 @@ async function cofeeWebhookHandler(req, res) {
 
 module.exports = {
   createApplication,
-  getApplications,
+  getAllApplications,
   cofeeWebhookHandler,
 };
