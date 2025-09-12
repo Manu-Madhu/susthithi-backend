@@ -29,6 +29,10 @@ async function createApplicationService(data, fee) {
   return await app.save();
 }
 
+async function getAApplicationByOrderIDService(order_id) {
+  return await Application.findOne({ paymentProviderOrderId: order_id });
+}
+
 async function updateApplicationPayment(appId, paymentData) {
   return await Application.findByIdAndUpdate(
     appId,
@@ -43,4 +47,5 @@ async function updateApplicationPayment(appId, paymentData) {
 module.exports = {
   createApplicationService,
   updateApplicationPayment,
+  getAApplicationByOrderIDService,
 };

@@ -1,7 +1,7 @@
-const Application = require("../models/Application.model.js");
 const {
   createApplicationService,
   updateApplicationPayment,
+  getAApplicationByOrderIDService,
 } = require("../services/application.service.js");
 const { createCofeeOrder } = require("../services/payment.service.js");
 const {
@@ -23,7 +23,7 @@ async function createApplication(req, res) {
       return res.status(400).json({ error: "Invalid category fee" });
     }
 
-    const referenceId = await generateReferenceId(data);
+    const referenceId = generateReferenceId(data);
 
     // Save initial application
     const app = await createApplicationService(data, fee);
@@ -63,7 +63,7 @@ async function createApplication(req, res) {
       orderStatus: normalizePaymentStatus(cofeeOrder.orderStatus),
     });
 
-    console.log(cofeeOrder)
+    console.log(cofeeOrder);
 
     res.status(200).json({
       success: true,
@@ -106,17 +106,36 @@ async function getApplications(req, res, next) {
 // Webhook handler (CoFee sends POST callbacks on success/failure)
 async function cofeeWebhookHandler(req, res, next) {
   try {
-    const { order_id, order_status } = req.body;
+    const { event_name, data } = req.body;
 
-    const app = await Application.findOne({ providerOrderId: order_id });
-    if (!app) return res.status(404).json({ error: "Application not found" });
+    if (!event_name || !data) {
+      return res.status(400).json({ error: "Invalid webhook payload" });
+    }
 
-    app.paymentStatus = normalizePaymentStatus(order_status);
+    // Extract order_id and status
+    const { order_id, order_status } = data;
+
+    // Find application by provider order id
+    const app = await getAApplicationByOrderIDService(order_id);
+    if (!app) {
+      return res.status(404).json({ error: "Application not found" });
+    }
+
+    // Normalize status (you can customize the function)
+    let paymentStatus = "pending";
+    if (event_name === "payment-order.paid" && order_status === "success") {
+      paymentStatus = "paid";
+    } else if (order_status === "failed" || order_status === "failure") {
+      paymentStatus = "failed";
+    }
+
+    // Update application
+    app.paymentStatus = paymentStatus;
     await app.save();
 
-    res.status(200).json({ received: true });
+    res.status(200).json({ received: true, updatedStatus: paymentStatus });
   } catch (err) {
-    console.error(err);
+    console.error("CoFee Webhook Error:", err);
     res.status(500).json({
       success: false,
       message: "Internal Server error",
