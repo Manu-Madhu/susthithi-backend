@@ -12,7 +12,7 @@ const bodyParser = require("body-parser");
 const logger = require("./utils/logger.js");
 
 const app = express();
-app.set("trust proxy", 1);
+// app.set("trust proxy", 1);
 
 app.use(helmet());
 app.use(cors());
@@ -26,11 +26,11 @@ app.use(
 );
 app.use(express.urlencoded({ extended: true }));
 
-const limiter = rateLimit({
-  windowMs: 1 * 60 * 1000,
-  max: 100,
-});
-app.use(limiter);
+// const limiter = rateLimit({
+//   windowMs: 1 * 60 * 1000,
+//   max: 100,
+// });
+// app.use(limiter);
 
 // Routes
 app.use("/api", applicationRoutes);

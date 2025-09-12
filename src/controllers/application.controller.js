@@ -92,8 +92,7 @@ async function createApplication(req, res) {
 async function getAllApplications(req, res, next) {
   try {
     const data = await getAllApplicationService();
-    res.status(200),
-      json({
+    res.status(200).json({
         success: true,
         data: data,
       });
