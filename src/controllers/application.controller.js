@@ -13,7 +13,8 @@ const {
 } = require("../utils/helperFunction.js");
 
 const FEE_MAP = {
-  cetaa: 3000,
+  cetaa: 1,
+  // cetaa: 3000,
   engineers_club: 3000,
   delegate: 5000,
 };
@@ -93,9 +94,9 @@ async function getAllApplications(req, res, next) {
   try {
     const data = await getAllApplicationService();
     res.status(200).json({
-        success: true,
-        data: data,
-      });
+      success: true,
+      data: data,
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({
