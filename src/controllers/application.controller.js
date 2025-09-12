@@ -1,3 +1,4 @@
+const Application = require("../models/Application.model.js");
 const {
   createApplicationService,
   updateApplicationPayment,
@@ -116,7 +117,7 @@ async function cofeeWebhookHandler(req, res, next) {
     const { order_id, order_status } = data;
 
     // Find application by provider order id
-    const app = await getAApplicationByOrderIDService(order_id);
+    const app = await Application.findOne({ providerOrderId: order_id });
     if (!app) {
       return res.status(404).json({ error: "Application not found" });
     }
