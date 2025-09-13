@@ -96,18 +96,30 @@ async function createApplication(req, res) {
   }
 }
 
-async function getAllApplications(req, res, next) {
+async function getAllApplications(req, res) {
   try {
-    const data = await getAllApplicationService();
+     const { page = 1, limit = 10, search = "", startDate, endDate } = req.query;
+
+    const { data, total } = await getAllApplicationService({
+      page,
+      limit,
+      search,
+      startDate,
+      endDate,
+    });
+
     res.status(200).json({
       success: true,
-      data: data,
+      total,
+      page: Number(page),
+      limit: Number(limit),
+      data,
     });
   } catch (err) {
     console.error(err);
     res.status(500).json({
       success: false,
-      message: "Internal Server error",
+      message: err?.response || "Internal Server error",
       data: null,
       error: "INTERNAL_SERVER_ERROR",
     });

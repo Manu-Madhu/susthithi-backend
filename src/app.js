@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser");
 const { createHomePage } = require("./config/info.js");
 const applicationRoutes = require("./routes/application.routes.js");
 const errorHandler = require("./middlewares/errorHandler.midd.js");
+const authRouter = require("./routes/auth.routes.js")
 
 const logger = require("./utils/logger.js");
 const bodyParser = require("body-parser");
@@ -46,10 +47,12 @@ app.use(
     },
   })
 );
+
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use("/api", applicationRoutes);
+app.use("/api/auth", authRouter);
 
 // Health check
 app.get("/health", (req, res) => res.json({ ok: true }));
