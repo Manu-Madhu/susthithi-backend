@@ -113,8 +113,8 @@ async function getAllApplications(req, res, next) {
 
 async function getApplicationById(req, res, next) {
   try {
-    const {id} = req.params
-    const data = await getApplicationByIdService({paymentProviderOrderId:id});
+    const { id } = req.params
+    const data = await getApplicationByIdService({ paymentProviderOrderId: id });
     res.status(200).json({
       success: true,
       data: data,
