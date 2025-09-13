@@ -40,7 +40,7 @@ async function getAApplicationByOrderIDService(order_id) {
 }
 
 async function getApplicationByIdService(order_id) {
-  return await Application.findOne(order_id);
+  return await Application.findOne({paymentProviderOrderId: order_id});
 }
 
 async function updateApplicationPayment(appId, paymentData) {
