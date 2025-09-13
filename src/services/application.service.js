@@ -5,11 +5,12 @@ async function createApplicationService(data, fee) {
   const existing = await Application.findOne({
     email: data.email,
     category: data.category,
+    paymentStatus: "paid",
   });
 
   if (existing) {
     const error = new Error("Application already exists for this email and category");
-    error.statusCode = 400; 
+    error.statusCode = 400;
     throw error;
   }
 
@@ -31,13 +32,28 @@ async function createApplicationService(data, fee) {
   return await app.save();
 }
 
-async function getAllApplicationService({ page, limit, search, startDate, endDate }) {
+async function getAllApplicationService({
+  page,
+  limit,
+  search,
+  startDate,
+  endDate
+}) {
   const query = {};
 
-   if (search) {
-    query.$or = [
-      { name: { $regex: search, $options: "i" } },   // case-insensitive
-      { email: { $regex: search, $options: "i" } },
+  if (search) {
+    query.$or = [{
+        name: {
+          $regex: search,
+          $options: "i"
+        }
+      }, // case-insensitive
+      {
+        email: {
+          $regex: search,
+          $options: "i"
+        }
+      },
     ];
   }
 
@@ -50,11 +66,16 @@ async function getAllApplicationService({ page, limit, search, startDate, endDat
   const skip = (page - 1) * limit;
 
   const [data, total] = await Promise.all([
-    Application.find(query).skip(skip).limit(Number(limit)).sort({ createdAt: -1 }),
+    Application.find(query).skip(skip).limit(Number(limit)).sort({
+      createdAt: -1
+    }),
     Application.countDocuments(query),
   ]);
-  
-  return { data, total };
+
+  return {
+    data,
+    total
+  };
 }
 
 async function getAApplicationByOrderIDService(order_id) {
