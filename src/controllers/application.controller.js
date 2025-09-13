@@ -14,11 +14,13 @@ const {
   normalizePaymentStatus,
   generateReferenceId,
 } = require("../utils/helperFunction.js");
-const { sendPaymentSuccessEmail } = require("../utils/mailer.js");
+const {
+  sendPaymentSuccessEmail
+} = require("../utils/mailer.js");
 
 const FEE_MAP = {
-  cetaa: 2,
-  // cetaa: 3000,
+  // cetaa: 2,
+  cetaa: 3000,
   engineers_club: 3000,
   delegate: 5000,
 };
@@ -150,29 +152,43 @@ async function cofeeWebhookHandler(req, res) {
 
     console.log("Webhook verified:", req.body);
 
-    const { event_name, data } = req.body;
-    const { order_status, order_id } = data;
+    const {
+      event_name,
+      data
+    } = req.body;
+    const {
+      order_status,
+      order_id
+    } = data;
 
-    const app = await Application.findOne({ paymentProviderOrderId: order_id });
-    if (!app) return res.status(404).json({ error: "Application not found" });
+    const app = await Application.findOne({
+      paymentProviderOrderId: order_id
+    });
+    if (!app) return res.status(404).json({
+      error: "Application not found"
+    });
 
     if (event_name === "payment-order.paid" && order_status === "success") {
       app.paymentStatus = "paid";
       await app.save();
+
+      console.log(app, 'data from the db')
 
       // Send email on success
       await sendPaymentSuccessEmail({
         to: app.email,
         name: app.fullName,
         referenceId: app.paymentProviderOrderId,
-        amount: app.fee,
+        amount: app.feeAmount,
       });
     } else {
       app.paymentStatus = "failed";
       await app.save();
     }
 
-    res.status(200).json({ received: true });
+    res.status(200).json({
+      received: true
+    });
   } catch (err) {
     console.error("Webhook error:", err);
     res.status(500).json({
