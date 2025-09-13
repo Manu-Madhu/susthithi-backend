@@ -8,7 +8,9 @@ async function createApplicationService(data, fee) {
   });
 
   if (existing) {
-    throw new Error("Application already exists for this email and category");
+    const error = new Error("Application already exists for this email and category");
+    error.statusCode = 400; 
+    throw error;
   }
 
   const app = new Application({

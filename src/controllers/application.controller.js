@@ -86,9 +86,9 @@ async function createApplication(req, res) {
     });
   } catch (err) {
     console.error(err);
-    res.status(500).json({
+    res.status(err.statusCode || 500).json({
       success: false,
-      message: err.response?.message || "Internal Server Error",
+      message: err.message || "Internal Server Error",
     });
   }
 }
@@ -113,8 +113,12 @@ async function getAllApplications(req, res, next) {
 
 async function getApplicationById(req, res, next) {
   try {
-    const { id } = req.params
-    const data = await getApplicationByIdService({ paymentProviderOrderId: id });
+    const {
+      id
+    } = req.params
+    const data = await getApplicationByIdService({
+      paymentProviderOrderId: id
+    });
     res.status(200).json({
       success: true,
       data: data,
