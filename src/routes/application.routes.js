@@ -7,7 +7,7 @@ router.post("/applications", controller.createApplication);
 
 // fetch
 router.get("/applications", controller.getAllApplications);
-// router.get("/applications/:id", controller.getApplicationById);
+router.get("/applications/:id", controller.getApplicationById);
 
 // webhook endpoint (stripe)
 router.post("/webhooks/cofee", controller.cofeeWebhookHandler);

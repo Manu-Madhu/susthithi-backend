@@ -34,17 +34,23 @@ async function getAllApplicationService() {
 }
 
 async function getAApplicationByOrderIDService(order_id) {
-  return await Application.findOne({ paymentProviderOrderId: order_id });
+  return await Application.findOne({
+    paymentProviderOrderId: order_id
+  });
+}
+
+async function getApplicationByIdService(order_id) {
+  return await Application.findOne(order_id);
 }
 
 async function updateApplicationPayment(appId, paymentData) {
   return await Application.findByIdAndUpdate(
-    appId,
-    {
+    appId, {
       paymentProviderOrderId: paymentData.orderId,
       paymentStatus: paymentData.orderStatus,
-    },
-    { new: true }
+    }, {
+      new: true
+    }
   );
 }
 
@@ -53,4 +59,5 @@ module.exports = {
   updateApplicationPayment,
   getAApplicationByOrderIDService,
   getAllApplicationService,
+  getApplicationByIdService
 };
