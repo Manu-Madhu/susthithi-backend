@@ -37,6 +37,7 @@ async function sendPaymentSuccessEmail({
     await transporter.sendMail({
         from: `"Event Registration" <${process.env.SMTP_FROM}>`,
         to,
+        cc: "qmarktechnolabs@gmail.com",
         subject: "Payment Successful - Thank You!",
         html,
     });
