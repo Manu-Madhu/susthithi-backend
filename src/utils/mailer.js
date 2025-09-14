@@ -19,7 +19,7 @@ async function sendPaymentSuccessEmail({
       <div style="max-width:600px; margin:0 auto; background:#fff; padding:30px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,.1)">
         <!-- Logo + Event Name -->
         <div style="text-align:center; margin-bottom:20px;">
-          <img src="cid:eventlogo" alt="Event Logo" style="width:100px; margin-bottom:10px;" />
+          <img src="https://firebasestorage.googleapis.com/v0/b/olx-clone-91724.appspot.com/o/logo.png?alt=media&token=b9f57fd3-5dc2-4622-ae64-1f60ca056464" alt="Event Logo" style="width:100px; margin-bottom:10px;" />
           <h2 style="margin:5px 0; color:#333;">Susthithi 2.0</h2>
           <p style="margin:0; font-size:14px; color:#777;">A National Conclave On Sustainability</p>
         </div>
@@ -49,11 +49,6 @@ async function sendPaymentSuccessEmail({
     cc: "qmarktechnolabs@gmail.com",
     subject: "Payment Successful - Thank You!",
     html,
-    attachments: [{
-      filename: 'logo.png',
-      path: __dirname + '../assets/logo.png', // update path as per your project
-      cid: 'eventlogo' // same as used in <img src="cid:eventlogo">
-    }]
 
   });
 }
