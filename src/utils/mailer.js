@@ -1,23 +1,32 @@
 const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-    },
+  service: 'gmail',
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
+  },
 });
 
 async function sendPaymentSuccessEmail({
-    to,
-    name,
-    referenceId,
-    amount
+  to,
+  name,
+  referenceId,
+  amount
 }) {
-    const html = `
+  const html = `
     <div style="font-family: Arial, sans-serif; background:#f9f9f9; padding:20px;">
       <div style="max-width:600px; margin:0 auto; background:#fff; padding:30px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,.1)">
-        <h2 style="color:#4CAF50; text-align:center;"> Payment Successful!</h2>
+        <!-- Logo + Event Name -->
+        <div style="text-align:center; margin-bottom:20px;">
+          <img src="cid:eventlogo" alt="Event Logo" style="width:100px; margin-bottom:10px;" />
+          <h2 style="margin:5px 0; color:#333;">Susthithi 2.0</h2>
+          <p style="margin:0; font-size:14px; color:#777;">A National Conclave On Sustainability</p>
+        </div>
+
+        <hr style="margin:20px 0; border:none; border-top:1px solid #eee;" />
+
+        <h2 style="color:#4CAF50; text-align:center;"> Payment Successful!</h2> 
         <p>Hi <b>${name}</b>,</p>
         <p>We’re happy to inform you that your payment has been received successfully.</p>
         
@@ -34,15 +43,21 @@ async function sendPaymentSuccessEmail({
     </div>
   `;
 
-    await transporter.sendMail({
-        from: `"Event Registration" <${process.env.SMTP_FROM}>`,
-        to,
-        cc: "qmarktechnolabs@gmail.com",
-        subject: "Payment Successful - Thank You!",
-        html,
-    });
+  await transporter.sendMail({
+    from: `"Event Registration" <${process.env.SMTP_FROM}>`,
+    to,
+    cc: "qmarktechnolabs@gmail.com",
+    subject: "Payment Successful - Thank You!",
+    html,
+    attachments: [{
+      filename: 'logo.png',
+      path: __dirname + '../assets/logo.png', // update path as per your project
+      cid: 'eventlogo' // same as used in <img src="cid:eventlogo">
+    }]
+
+  });
 }
 
 module.exports = {
-    sendPaymentSuccessEmail
+  sendPaymentSuccessEmail
 };
