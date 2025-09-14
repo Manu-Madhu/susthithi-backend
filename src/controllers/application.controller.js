@@ -19,8 +19,8 @@ const {
 } = require("../utils/mailer.js");
 
 const FEE_MAP = {
-  cetaa: 2,
-  // cetaa: 3000,
+  // cetaa: 2,
+  cetaa: 3000,
   engineers_club: 3000,
   delegate: 5000,
 };
