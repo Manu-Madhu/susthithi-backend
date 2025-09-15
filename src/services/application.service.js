@@ -38,14 +38,24 @@ async function getAllApplicationService({
   search,
   startDate,
   endDate,
-  status
+  status,
+  pg
 }) {
   const query = {};
 
   if (search) {
-    query.$or = [
-      { fullName: { $regex: search, $options: "i" } }, // Changed from name to fullName
-      { email: { $regex: search, $options: "i" } },
+    query.$or = [{
+        fullName: {
+          $regex: search,
+          $options: "i"
+        }
+      }, // Changed from name to fullName
+      {
+        email: {
+          $regex: search,
+          $options: "i"
+        }
+      },
     ];
   }
 
@@ -56,7 +66,7 @@ async function getAllApplicationService({
   if (startDate && endDate) {
     const start = new Date(startDate);
     const end = new Date(endDate);
-    
+
     if (!isNaN(start.getTime()) && !isNaN(end.getTime())) {
       query.createdAt = {
         $gte: start,
@@ -67,14 +77,20 @@ async function getAllApplicationService({
 
   const skip = (page - 1) * limit;
 
+
+  // Base query
+  let dbQuery = Application.find(query).sort({ createdAt: -1 });
+
+  if (!pg) {
+    dbQuery = dbQuery.skip(skip).limit(Number(limit));
+  }
+
   const [data, total] = await Promise.all([
-    Application.find(query).skip(skip).limit(Number(limit)).sort({
-      createdAt: -1
-    }),
+    dbQuery,
     Application.countDocuments(query),
   ]);
 
-  return { data, total};
+  return { data, total };
 }
 
 async function getAApplicationByOrderIDService(order_id) {

@@ -98,15 +98,21 @@ async function createApplication(req, res) {
 
 async function getAllApplications(req, res) {
   try {
-    const { page = 1, limit = 10, search = "", startDate, endDate, status } = req.query;
+    const {
+      page = 1, limit = 10, pg = false, search = "", startDate, endDate, status
+    } = req.query;
 
-    const { data,  total } = await getAllApplicationService({
+    const {
+      data,
+      total
+    } = await getAllApplicationService({
       page,
       limit,
       search,
       startDate,
       endDate,
-      status
+      status,
+      pg
     });
 
     res.status(200).json({
