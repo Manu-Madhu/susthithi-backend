@@ -23,6 +23,7 @@ const FEE_MAP = {
   cetaa: 3000,
   engineers_club: 3000,
   delegate: 5000,
+  startup: 4000,
 };
 
 async function createApplication(req, res) {
