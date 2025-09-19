@@ -7,7 +7,7 @@ const ApplicationSchema = new Schema(
     phone: { type: String, required: true },
     category: {
       type: String,
-      enum: ["cetaa", "engineers_club", "delegate"],
+      enum: ["cetaa", "engineers_club", "delegate","startup"],
       required: true,
     },
     // optional fields depending on category
